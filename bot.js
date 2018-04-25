@@ -18,19 +18,6 @@ var giphy = require('giphy-api')(process.env.GIF);
 var atr1 = "https://cdn.discordapp.com/attachments/429134650288635906"
 var atr2 = "/437623169294008331/Poweredby_100px_Badge.gif" //LOL SidSoy
 
-//Express
-console.log("Working on Express")
-var express = require('express');
-var app = express();
-var http = require("http");
-app.get("/", (request, response) => {
-    response.sendStatus(200);
-});
-app.listen(process.env.PORT);
-setInterval(() => {
-    http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
-}, 280000);
-
 //Discord Initilization
 var bot = new Discord.Client({
     token: process.env.DIS,
