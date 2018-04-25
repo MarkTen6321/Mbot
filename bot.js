@@ -1,6 +1,6 @@
 //Modules
 console.log("Starting Bot....");
-var Discord = require('discord.io'); //Discord
+var Discord = require('./woorv6.js'); //Discord
 var gis = require('g-i-s'); //Google Image Search
 var oneLinerJoke = require('one-liner-joke'); //Joke
 const urban = require('urban.js'); //Dictionary
