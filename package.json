@@ -4,7 +4,7 @@
   "description": "Fixed Bugs",
   "main": "bot.js",
   "dependencies": {
-    "discord.io": "^2.5.3",
+    "discord.io": "https://github.com/Woor/discord.io/tree/gateway_v6",
     "express": "^4.16.3",
     "fs": "^0.0.1-security",
     "g-i-s": "^2.1.1",
