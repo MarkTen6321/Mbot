@@ -22,5 +22,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Sagnik Pradhan",
+  "engines": {
+    "node": "8.x"
+  },
   "license": "ISC"
 }
