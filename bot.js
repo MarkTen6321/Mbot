@@ -1,6 +1,6 @@
 //Modules
 console.log("Starting Bot....");
-var Discord = require('discord.io'); //Discord
+var Discord = require('./woorv6.js'); //Discord
 var gis = require('g-i-s'); //Google Image Search
 var oneLinerJoke = require('one-liner-joke'); //Joke
 const urban = require('urban.js'); //Dictionary
@@ -14,13 +14,13 @@ var tarot = require('./tarot')//tarot
 let Parser = require('rss-parser');
 let parser = new Parser();
 
-var giphy = require('giphy-api')('xIdrKbR17ZOX94NOuQhUL66kh7JwR3s3');
+var giphy = require('giphy-api')(process.env.GIF);
 var atr1 = "https://cdn.discordapp.com/attachments/429134650288635906"
 var atr2 = "/437623169294008331/Poweredby_100px_Badge.gif" //LOL SidSoy
 
 //Discord Initilization
 var bot = new Discord.Client({
-    token: "NDI4NTMzMTMxNjU0NTk0NTYx.DauqoA.UFzyBjlTMZsAlFdL-lLdwPym_H4",
+    token: process.env.DIS,
     autorun: true
 })
 bot.on('ready', function () {
