@@ -1,6 +1,6 @@
 //Modules
 console.log("Starting Bot....");
-var Discord = require('./woorv6.js'); //Discord
+var Discord = require('discord.io'); //Discord
 var gis = require('g-i-s'); //Google Image Search
 var oneLinerJoke = require('one-liner-joke'); //Joke
 const urban = require('urban.js'); //Dictionary
@@ -14,13 +14,13 @@ var tarot = require('./tarot')//tarot
 let Parser = require('rss-parser');
 let parser = new Parser();
 
-var giphy = require('giphy-api')(process.env.GIF);
+var giphy = require('giphy-api')('xIdrKbR17ZOX94NOuQhUL66kh7JwR3s3');
 var atr1 = "https://cdn.discordapp.com/attachments/429134650288635906"
 var atr2 = "/437623169294008331/Poweredby_100px_Badge.gif" //LOL SidSoy
 
 //Discord Initilization
 var bot = new Discord.Client({
-    token: process.env.DIS,
+    token: "NDI4NTMzMTMxNjU0NTk0NTYx.DauqoA.UFzyBjlTMZsAlFdL-lLdwPym_H4",
     autorun: true
 })
 bot.on('ready', function () {
@@ -33,6 +33,47 @@ bot.setPresence({
         name: "UNDER Trials"
     }
 });
+
+//Commands 
+let commands =
+    `Fun Commands 
+       MHug (@Person)         : Hug Someone
+       Mcudle (@Person)       : Cuddle with Someone
+       Mkiss (@Person)        : Kiss Someone
+       Mpat (@Person)         : Pat Someone
+       Mkick (@Person)        : Kick Someone
+       Mslap (@Person)        : Slap Someone
+       Mpoke (@Person)        : Poke Someone
+       Mhigh5 (@Person)       : Give Someone a High Five
+       Mthrow (@Person)       : Throw something at Someone
+       Mjoke                  : Random Joke
+       Mthought               : Shows a Random  Thought
+       MSthought              : Shows a Shower Thought
+       Mtarot                 : Lets do some tarot reading
+       Manon (Message)        : Post Anything Anonymously
+       Mdice                  : Throw a Dice
+       Mflip                  : It doesn't Flip but Flips a Coin
+       Myesno (Question)      : Says Yes or No to a Question
+       Mor (Option 1 or 2)    : Chooses between two options
+       Mgift (@Person) (Gift) : Gift Something to someone
+
+    Utility Commands
+       Mword (Word)           : Get Definiton of a Word
+       Mgoogle (Search Query) : Get Google Search Results
+       Mgif (Search Query)    : Search GIFs
+       Mimage (Search Query)  : Search Images
+       Mpost (#channel)       : Post something in a Nice Text Box
+
+    Moderation Commands (Admin Only)
+       Manounce <#channel>      : Announce something
+       Mrole <@Person> <(Role)> : Add someone to a Role in a snap
+       Munrole <@Person> <(Role)> : Remove someone from a Role
+       Mmute <@Person>          : Mute Someone
+       Munmute <@Person>        : Unmute Someone`
+
+
+//
+var ban
 
 //Colors
 var pink = 14684241
@@ -50,7 +91,12 @@ function sendEmbeds(a, b, c) {
         }
     })
 }
-
+function report(report) {
+    bot.sendMessage({
+        to: "332555437234978828",
+        message: report
+    })
+}
 
 //Message Event Happens
 bot.on('message', function (user, userID, channelID, message, event) {
@@ -60,6 +106,11 @@ bot.on('message', function (user, userID, channelID, message, event) {
     function nick() {
         var nick = bot.servers[serverID].members[userID].nick || user
         return nick
+    }
+
+    function errorm() {
+        sendEmbeds(channelID, blue, "Somethings Wrong Report sent to Developer")
+        report(err)
     }
 
     let r = message.split(" ")
@@ -406,14 +457,35 @@ bot.on('message', function (user, userID, channelID, message, event) {
         }
         else if (args[0] === "role") {
             if (persmissions()) {
+                let rol = message.substring(message.indexOf("(") + 1, message.indexOf(")"))
+                let roles = bot.servers[serverID].roles;
+                let roleID = Object.keys(roles).find(r => roles[r].name === rol);
                 bot.addToRole({
                     serverID: event.d.guild_id,
                     userID: event.d.mentions[0].id,
-                    roleID: event.d.mention_roles
+                    roleID: roleID
                 }, function (err, res) {
-                    if (err) console.log(err)
+                    if (err) { errorm() }
                     else {
-                        sendEmbeds(channelID, red, `Done ${event.d.mentions[0].username} added to <@&${event.d.mention_roles}>`)
+                        sendEmbeds(channelID, red, `Done ${event.d.mentions[0].username} added to ${rol}`)
+                    }
+                });
+            }
+            else { sendEmbeds(channelID, red, "You dont have permissions !") }
+        }
+        else if (args[0] === "unrole") {
+            if (persmissions()) {
+                let rol = message.substring(message.indexOf("(") + 1, message.indexOf(")"))
+                let roles = bot.servers[serverID].roles;
+                let roleID = Object.keys(roles).find(r => roles[r].name === rol);
+                bot.removeFromRole({
+                    serverID: event.d.guild_id,
+                    userID: event.d.mentions[0].id,
+                    roleID: roleID
+                }, function (err, res) {
+                    if (err) { errorm() }
+                    else {
+                        sendEmbeds(channelID, red, `Done ${event.d.mentions[0].username} removed from ${rol}`)
                     }
                 });
             }
@@ -426,9 +498,14 @@ bot.on('message', function (user, userID, channelID, message, event) {
             if (persmissions()) {
                 bot.ban({
                     serverID: event.d.guild_id, userID: event.d.mentions[0].id
+                }, function (err, res) {
+                    if (err) { errorm() }
+                    else {
+                        sendEmbeds(channelID, red, `You have succesfully banned ${event.d.mentions[0].username}. Reason: ${reason}`)
+                        sendEmbeds(channelID, pink, "Note: Unban can be done only manually")
+                    }
                 });
-                sendEmbeds(channelID, red, `You have succesfully banned ${event.d.mentions[0].username}. \nReason: ${reason}`)
-                sendEmbeds(channelID, pink, "Note: Unban can be done only manually")
+
             }
             else { sendEmbeds(channelID, red, "You dont have permissions !!!") }
         }
@@ -437,20 +514,55 @@ bot.on('message', function (user, userID, channelID, message, event) {
                 bot.mute({
                     serverID: event.d.guild_id,
                     userID: event.d.mentions[0].id
+                }, function (err, res) {
+                    if (err) { errorm() }
+                    else {
+                        sendEmbeds(channelID, pink, `You have muted ${event.d.mentions[0].username}. Reason: ${reason}`)
+                        sendEmbeds(channelID, green, "Use unmute <person> to Unmute")
+                    }
                 });
-                sendEmbeds(channelID, pink, `You have muted ${event.d.mentions[0].username}. /nReason: ${reason}`)
-                sendEmbeds(channelID, green, "Use unmute <person> to Unmute")
             }
             else { sendEmbeds(channelID, red, "You dont have permissions !!!") }
         }
         else if (args[0] === "unmute") {
-            if (userHasPermission) {
+            if (persmissions()) {
                 bot.unmute({
                     serverID: event.d.guild_id,
                     userID: event.d.mentions[0].id
+                }, function (err, res) {
+                    if (err) { errorm() }
+                    else {
+                        sendEmbeds(channelID, blue, "Unmuted")
+                    }
                 });
             }
             else { sendEmbeds(channelID, red, "You dont have permissions !!!") }
+        }
+        else if (args[0] === "akick") {
+            if (persmissions()) {
+                bot.kick({
+                    serverID: event.d.guild_id,
+                    userID: event.d.mentions[0].id
+                }, function (err, res) {
+                    if (err) { errorm() }
+                    else { sendEmbeds(channelID, red, `${event.d.mentions[0].username} was kicked. Reason: ${reason}`) }
+                })
+            }
+            else { sendEmbeds(channelID, red, "You dont have permissions !!!") }
+        }
+        else if (args[0] === "tes") {
+            console.log(event.d.guild_id)
+            bot.getBans(event.d.guild_id, function (err, res) {
+                console.log(res)
+            })
+        }
+        else if (args[0] === "commands") {
+            sendEmbeds(channelID, pink, "Commands :")
+            setTimeout(() => {
+            bot.sendMessage({
+                to: channelID,
+                message: "```" + commands + "```"
+            })},200)
         }
     }
 })
