@@ -30,7 +30,7 @@ bot.on('ready', function () {
 });
 bot.setPresence({
     game: {
-        name: "UNDER Trials"
+        name: "Mcommands"
     }
 });
 
