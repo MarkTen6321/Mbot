@@ -36,43 +36,43 @@ bot.setPresence({
 
 
 //Commands 
-let fcommands =
-      `MHug (@Person)         : Hug Someone
-       Mcudle (@Person)       : Cuddle with Someone
-       Mkiss (@Person)        : Kiss Someone
-       Mpat (@Person)         : Pat Someone
-       Mkick (@Person)        : Kick Someone
-       Mslap (@Person)        : Slap Someone
-       Mpoke (@Person)        : Poke Someone
-       Mhigh5 (@Person)       : Give Someone a High Five
-       Mthrow (@Person)       : Throw something at Someone
-       Mjoke                  : Random Joke
-       Mthought               : Shows a Random  Thought
-       MSthought              : Shows a Shower Thought
-       Mtarot                 : Lets do some tarot reading
-       Manon (Message)        : Post Anything Anonymously
-       Mdice                  : Throw a Dice
-       Mflip                  : It doesn't Flip but Flips a Coin
-       Myesno (Question)      : Says Yes or No to a Question
-       Mor (Option 1 or 2)    : Chooses between two options
-       Mgift (@Person) (Gift) : Gift Something to someone`
+let fcommands =`
+MHug (@Person)         : Hug Someone
+Mcudle (@Person)       : Cuddle with Someone
+Mkiss (@Person)        : Kiss Someone
+Mpat (@Person)         : Pat Someone
+Mkick (@Person)        : Kick Someone
+Mslap (@Person)        : Slap Someone
+Mpoke (@Person)        : Poke Someone
+Mhigh5 (@Person)       : Give Someone a High Five
+Mthrow (@Person)       : Throw something at Someone
+Mjoke                  : Random Joke
+Mthought               : Shows a Random  Thought
+MSthought              : Shows a Shower Thought
+Mtarot                 : Lets do some tarot reading
+Manon (Message)        : Post Anything Anonymously
+Mdice                  : Throw a Dice
+Mflip                  : It doesn't Flip but Flips a Coin
+Myesno (Question)      : Says Yes or No to a Question
+Mor (Option 1 or 2)    : Chooses between two options
+Mgift (@Person) (Gift) : Gift Something to someone`
 
-let ucommands =
-      `Mword (Word)           : Get Definiton of a Word
-       Mgoogle (Search Query) : Get Google Search Results
-       Mgif (Search Query)    : Search GIFs
-       Mimage (Search Query)  : Search Images
-       Mpost (#channel)       : Post something in a Nice Text Box
-       Mpoll (#chl) (Reaction 1 and 2): Do some cool Polls in a snap
-       Mwea (Place)           : Get Weather Info
-       Mnews                  : Get Latest News`
+let ucommands =`
+Mword (Word)           : Get Definiton of a Word
+Mgoogle (Search Query) : Get Google Search Results
+Mgif (Search Query)    : Search GIFs
+Mimage (Search Query)  : Search Images
+Mpost (#channel)       : Post something in a Nice Text Box
+Mpoll (#chl) (Reaction 1 and 2): Do some cool Polls in a snap
+Mwea (Place)           : Get Weather Info
+Mnews                  : Get Latest News`
 
-let mcommands =
-      `Manounce <#channel>      : Announce something
-       Mrole <@Person> <(Role)> : Add someone to a Role in a snap
-       Munrole <@Person> <(Role)> : Remove someone from a Role
-       Mmute <@Person>          : Mute Someone
-       Munmute <@Person>        : Unmute Someone`
+let mcommands = `
+Manounce <#channel>      : Announce something
+Mrole <@Person> <(Role)> : Add someone to a Role in a snap
+Munrole <@Person> <(Role)> : Remove someone from a Role
+Mmute <@Person>          : Mute Someone
+Munmute <@Person>        : Unmute Someone`
 
 
 //
