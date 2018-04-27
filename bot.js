@@ -34,10 +34,10 @@ bot.setPresence({
     }
 });
 
+
 //Commands 
-let commands =
-    `Fun Commands 
-       MHug (@Person)         : Hug Someone
+let fcommands =
+      `MHug (@Person)         : Hug Someone
        Mcudle (@Person)       : Cuddle with Someone
        Mkiss (@Person)        : Kiss Someone
        Mpat (@Person)         : Pat Someone
@@ -55,17 +55,20 @@ let commands =
        Mflip                  : It doesn't Flip but Flips a Coin
        Myesno (Question)      : Says Yes or No to a Question
        Mor (Option 1 or 2)    : Chooses between two options
-       Mgift (@Person) (Gift) : Gift Something to someone
+       Mgift (@Person) (Gift) : Gift Something to someone`
 
-    Utility Commands
-       Mword (Word)           : Get Definiton of a Word
+let ucommands =
+      `Mword (Word)           : Get Definiton of a Word
        Mgoogle (Search Query) : Get Google Search Results
        Mgif (Search Query)    : Search GIFs
        Mimage (Search Query)  : Search Images
        Mpost (#channel)       : Post something in a Nice Text Box
+       Mpoll (#chl) (Reaction 1 and 2): Do some cool Polls in a snap
+       Mwea (Place)           : Get Weather Info
+       Mnews                  : Get Latest News`
 
-    Moderation Commands (Admin Only)
-       Manounce <#channel>      : Announce something
+let mcommands =
+      `Manounce <#channel>      : Announce something
        Mrole <@Person> <(Role)> : Add someone to a Role in a snap
        Munrole <@Person> <(Role)> : Remove someone from a Role
        Mmute <@Person>          : Mute Someone
@@ -94,7 +97,7 @@ function sendEmbeds(a, b, c) {
 function report(report) {
     bot.sendMessage({
         to: "332555437234978828",
-        message: report
+        message: "```" + report.statusMessage + "```"
     })
 }
 
@@ -108,7 +111,7 @@ bot.on('message', function (user, userID, channelID, message, event) {
         return nick
     }
 
-    function errorm() {
+    function errorm(err) {
         sendEmbeds(channelID, blue, "Somethings Wrong Report sent to Developer")
         report(err)
     }
@@ -185,7 +188,7 @@ bot.on('message', function (user, userID, channelID, message, event) {
         }
     }
 
-    if (message.toLowerCase().substring(0, 1) === "m") {
+        if (message.toLowerCase().substring(0, 1) === "m") {
         if (args[0] === "hug") {
             console.log(`Hug asked by ${user}`)
             GIF("Bro Hug", channelID);
@@ -428,11 +431,23 @@ bot.on('message', function (user, userID, channelID, message, event) {
             })
             sendEmbeds(channelID, pink, "The card says about: " + h)
         }
+        else if (args[0] === "nick") {
+            console.log(reason)
+            bot.editNickname({
+                serverID: event.d.guild_id,
+                userID: event.d.mentions[0].id,
+                nick: reason
+            }, function (err, res) {
+                if (err) { 
+                    errorm(err)
+                    console.log(err) }
+                else {
+                    sendEmbeds(channelID, pink, "Nickname set to: " + reason)
+                }
+            });
+        }
         else if (args[0] === "post") {
-            let mes = message.split(" ")
-            mes.splice(0, 2)
-            mes = mes.join(" ")
-            sendEmbeds(extract(), pink, nick() + " says: " + mes)
+            sendEmbeds(extract(), pink, nick() + " says: " + reason)
         }
         else if (args[0] === "sthoughts") {
             (async () => {
@@ -443,6 +458,88 @@ bot.on('message', function (user, userID, channelID, message, event) {
                 sendEmbeds(channelID, pink, "Shower Thought :")
                 setTimeout(() => { sendEmbeds(channelID, purple, feed.items[n].title) }, 400)
             })();
+        }
+        else if (args[0] === "poll") {
+            let k = args[2];
+            let j = args[3];
+            bot.sendMessage({
+                to: extract(args[1]),
+                message: args.slice(4).join(' ')
+            }, function (err, res) {
+
+                setTimeout(() => {
+                    bot.addReaction({
+                        channelID: res.channel_id,
+                        messageID: res.id,
+                        reaction: k
+                    })
+                }, 400)
+
+                setTimeout(() => {
+                    bot.addReaction({
+                        channelID: res.channel_id,
+                        messageID: res.id,
+                        reaction: j
+                    })
+                }, 800)
+            })
+        }
+        else if (args[0] === "news") {
+            (async () => {
+                let feed = await parser.parseURL('http://rss.cnn.com/rss/edition_world.rss');
+                let n = Math.floor(Math.random() * feed.items.length)
+                bot.sendMessage({
+                    to: channelID,
+                    embed: {
+                        color: purple,
+                        title: feed.items[n].title,
+                        description: h2p(feed.items[n].content) + "\n\nRead More at: " + feed.items[n].link ,
+                        footer: {
+                            text: "From CNN News"
+                        }
+                    }
+                })
+            })();
+        }
+        else if (args[0] === "wea") {
+            weather.find({ search: message.substring(4), degreeType: 'C' }, function (err, result) {
+                if (err) console.log(err);
+                let location = result[0].location.name
+                let temperature = result[0].current.temperature + " Celsius"
+                let skytext = result[0].current.skytext
+                let humidity = result[0].current.humidity + " Percentage"
+                let winddisplay = result[0].current.winddisplay
+                bot.sendMessage({
+                    to: channelID,
+                    embed: {
+                        color: pink,
+                        title: "Weather :",
+                        fields: [
+                            {
+                                name: "Location :",
+                                value: location
+                            },
+                            {
+                                name: "Temperature :",
+                                value: temperature
+                            },
+                            {
+                                name: "Sky Text :",
+                                value: skytext
+                            },
+                            {
+                                name: "Humidity :",
+                                value: humidity
+                            },
+                            {
+                                name: "Wind :",
+                                value: winddisplay
+                            }
+                        ]
+                    }
+                })
+
+            });
         }
 
         //Admin Commands
@@ -465,7 +562,7 @@ bot.on('message', function (user, userID, channelID, message, event) {
                     userID: event.d.mentions[0].id,
                     roleID: roleID
                 }, function (err, res) {
-                    if (err) { errorm() }
+                    if (err) { errorm(err) }
                     else {
                         sendEmbeds(channelID, red, `Done ${event.d.mentions[0].username} added to ${rol}`)
                     }
@@ -483,7 +580,7 @@ bot.on('message', function (user, userID, channelID, message, event) {
                     userID: event.d.mentions[0].id,
                     roleID: roleID
                 }, function (err, res) {
-                    if (err) { errorm() }
+                    if (err) { errorm(err) }
                     else {
                         sendEmbeds(channelID, red, `Done ${event.d.mentions[0].username} removed from ${rol}`)
                     }
@@ -499,7 +596,7 @@ bot.on('message', function (user, userID, channelID, message, event) {
                 bot.ban({
                     serverID: event.d.guild_id, userID: event.d.mentions[0].id
                 }, function (err, res) {
-                    if (err) { errorm() }
+                    if (err) { errorm(err) }
                     else {
                         sendEmbeds(channelID, red, `You have succesfully banned ${event.d.mentions[0].username}. Reason: ${reason}`)
                         sendEmbeds(channelID, pink, "Note: Unban can be done only manually")
@@ -515,7 +612,7 @@ bot.on('message', function (user, userID, channelID, message, event) {
                     serverID: event.d.guild_id,
                     userID: event.d.mentions[0].id
                 }, function (err, res) {
-                    if (err) { errorm() }
+                    if (err) { errorm(err) }
                     else {
                         sendEmbeds(channelID, pink, `You have muted ${event.d.mentions[0].username}. Reason: ${reason}`)
                         sendEmbeds(channelID, green, "Use unmute <person> to Unmute")
@@ -530,7 +627,7 @@ bot.on('message', function (user, userID, channelID, message, event) {
                     serverID: event.d.guild_id,
                     userID: event.d.mentions[0].id
                 }, function (err, res) {
-                    if (err) { errorm() }
+                    if (err) { errorm(err) }
                     else {
                         sendEmbeds(channelID, blue, "Unmuted")
                     }
@@ -544,7 +641,7 @@ bot.on('message', function (user, userID, channelID, message, event) {
                     serverID: event.d.guild_id,
                     userID: event.d.mentions[0].id
                 }, function (err, res) {
-                    if (err) { errorm() }
+                    if (err) { errorm(err) }
                     else { sendEmbeds(channelID, red, `${event.d.mentions[0].username} was kicked. Reason: ${reason}`) }
                 })
             }
@@ -559,10 +656,28 @@ bot.on('message', function (user, userID, channelID, message, event) {
         else if (args[0] === "commands") {
             sendEmbeds(channelID, pink, "Commands :")
             setTimeout(() => {
-            bot.sendMessage({
-                to: channelID,
-                message: "```" + commands + "```"
-            })},200)
+                bot.sendMessage({
+                    to: channelID,
+                    embed: {
+                        title: "Commands of MBot:",
+                        color: red,
+                        fields: [
+                            {
+                                name: "Fun Commands:",
+                                value: "```" + fcommands + "```"
+                            },
+                            {
+                                name: "Utility Commands:",
+                                value: "```" + ucommands + "```"
+                            },
+                            {
+                                name: "Admin Commands:",
+                                value: "```" + mcommands + "```"
+                            }
+                        ]
+                    }
+                })
+            }, 200)
         }
     }
 })
