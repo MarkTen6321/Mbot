@@ -36,7 +36,8 @@ bot.setPresence({
 
 
 //Commands 
-let fcommands =`
+let fcommands =`PHP
+
 MHug (@Person)         : Hug Someone
 Mcudle (@Person)       : Cuddle with Someone
 Mkiss (@Person)        : Kiss Someone
@@ -57,7 +58,8 @@ Myesno (Question)      : Says Yes or No to a Question
 Mor (Option 1 or 2)    : Chooses between two options
 Mgift (@Person) (Gift) : Gift Something to someone`
 
-let ucommands =`
+let ucommands =`PHP
+
 Mword (Word)           : Get Definiton of a Word
 Mgoogle (Search Query) : Get Google Search Results
 Mgif (Search Query)    : Search GIFs
@@ -67,7 +69,8 @@ Mpoll (#chl) (Reaction 1 and 2): Do some cool Polls in a snap
 Mwea (Place)           : Get Weather Info
 Mnews                  : Get Latest News`
 
-let mcommands = `
+let mcommands = `PHP
+
 Manounce <#channel>      : Announce something
 Mrole <@Person> <(Role)> : Add someone to a Role in a snap
 Munrole <@Person> <(Role)> : Remove someone from a Role
@@ -664,15 +667,15 @@ bot.on('message', function (user, userID, channelID, message, event) {
                         fields: [
                             {
                                 name: "Fun Commands:",
-                                value: "```" + fcommands + "```"
+                                value: "```PHP" + fcommands + "```"
                             },
                             {
                                 name: "Utility Commands:",
-                                value: "```" + ucommands + "```"
+                                value: "```PHP" + ucommands + "```"
                             },
                             {
                                 name: "Admin Commands:",
-                                value: "```" + mcommands + "```"
+                                value: "```PHP" + mcommands + "```"
                             }
                         ]
                     }
