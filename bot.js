@@ -278,6 +278,10 @@ bot.on('message', function (user, userID, channelID, message, event) {
             setTimeout(() => { GIF("WTF", channelID) }, 500)
             sendEmbeds(channelID, purple, "WTF (What the Fork)")
         }
+        else if (args[0] === "scream") {
+            setTimeout(() => { GIF("scream", channelID) }, 500)
+            sendEmbeds(channelID, purple, ":scream: :scream: :scream:")
+        }
         else if (args[0] === "dice") {
             let d = (Math.floor(Math.random() * 5)) + 1;
             sendEmbeds(channelID, pink, `${nick()}, Ooooooooooooooooh It is a ${d} :game_die:`)
