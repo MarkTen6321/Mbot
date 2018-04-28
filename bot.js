@@ -71,7 +71,6 @@ Mnews                  : Get Latest News`
 
 let mcommands = `py
 
-Manounce <#channel>      : Announce something
 Mrole <@Person> <(Role)> : Add someone to a Role in a snap
 Munrole <@Person> <(Role)> : Remove someone from a Role
 Mmute <@Person>          : Mute Someone
@@ -470,6 +469,7 @@ bot.on('message', function (user, userID, channelID, message, event) {
             })();
         }
         else if (args[0] === "poll") {
+            console.log("Poll Asked")
             let k = args[2];
             let j = args[3];
             bot.sendMessage({
