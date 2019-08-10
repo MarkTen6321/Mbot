@@ -104,7 +104,7 @@ async def spam_handle(message):
   else: 
     data = {
       u'id': author_id,
-      u'username': message.author.username,
+      u'username': message.author.name,
       u'spams': 1
     }
     await handleTimeout(data, message)

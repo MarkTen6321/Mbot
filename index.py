@@ -32,8 +32,11 @@ if __name__ == '__main__':
 @bot.event
 async def on_ready():
   print('Logged in as: {0.name} \nID: {0.id} \nTimeStamp: {1}'.format(bot.user, time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())))
-
-
+@bot.event
+async def on_message(message):
+    if (not message.author == bot.user) and message.guild and config['guild_id'] == str(message.guild.id):
+        await handleDiscordSpam(message)
+    await bot.process_commands(message)
   
 
 bot.run(config['token'])
