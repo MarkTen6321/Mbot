@@ -10,15 +10,15 @@ from discord.ext import commands
 class tag(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
-
+    #Create a group for our sub commands 
     @commands.group(invoke_without_command = True)
-    async def tag(self,ctx,*content):
-        
+    async def tag(self,ctx,title: str,*content):
+        content = ' '.join(content)
         if ctx.invoked_subcommand is None:
-            args = content
+            
         
-            tag_doc = db.document('discord_tags/{0}/tags/{1}'.format(ctx.guild.id,args[0])).get()
-            tag_field = tag_doc.to_dict()
+            tag_doc = db.document('discord_tags/{0}/tags/{1}'.format(ctx.guild.id,title)).get()
+            tag_field = tag_doc.to_dict() #This is needed to fetch fields
             if tag_doc.exists:
                 await ctx.send(tag_field['description'].replace('<br>','\n'))
             else:
@@ -28,50 +28,52 @@ class tag(commands.Cog):
                 await ctx.send(embed=embed)
             
     @tag.command()
-    async def add(self,ctx,*content):
-        args = content
+    async def add(self,ctx,title:str,*content):
+        content = ' '.join(content)
         
-        tag_title = db.document('discord_tags/{0}/tags/{1}'.format(ctx.guild.id,args[0])).get()
+        tag_title = db.document('discord_tags/{0}/tags/{1}'.format(ctx.guild.id,title)).get()
         if tag_title.exists:
             color = discord.Color.from_rgb(237, 0, 0)
             description = 'That tag already exists'
             embed = discord.Embed(color= color, description= description)
             await ctx.send(embed=embed)
         else:
+            #Create a document with fields
             data = {
-                u'title': args[0],
-                u'description': ' '.join(args[1:len(args)]),
+                u'title': title,
+                u'description': content,
                 u'author_id': ctx.author.id,
                 u'author_name': ctx.author.name
             }
             await handleTimeout(data,ctx)
     @tag.command()
-    async def edit(self,ctx,arg,*content):
-       
-        tag_title = db.document('discord_tags/{0}/tags/{1}'.format(ctx.guild.id,arg)).get()
+    async def edit(self,ctx,title:str,*content):
+        content = ' '.join(content)
+        tag_title = db.document('discord_tags/{0}/tags/{1}'.format(ctx.guild.id,title)).get()
         if tag_title.exists:
-            tag_title.reference.update({'description': ' '.join(content)})
+            tag_title.reference.update({'description': content}) #update changes a specified field in a document
             color = discord.Color.from_rgb(0, 106, 212)
             embedTitle = 'Edited tag'
-            description = arg
+            description = title
             embed = discord.Embed(color= color, description= description, title = embedTitle)
             await ctx.send(embed=embed)
         else:
-            ctx.send('A tag with the name "{0}" does not exist, create a tag using `m!addtag [tag name] [value]'.format(arg))
+            await ctx.send('A tag with the name "{0}" does not exist, create a tag using `m!addtag [tag name] [value]'.format(title))
 
     @tag.command()
-    async def delete(self,ctx,arg):
-        tag_title = db.document('discord_tags/{0}/tags/{1}'.format(ctx.guild.id,arg)).get()
+    async def delete(self,ctx,title:str):
+        
+        tag_title = db.document('discord_tags/{0}/tags/{1}'.format(ctx.guild.id,title)).get()
         
         if tag_title.exists:
-            tag_title.reference.delete()
+            tag_title.reference.delete() #You have to make it a reference to delete it
             color = discord.Color.from_rgb(227, 88, 2)
             embedTitle = 'Removed tag'
-            description = arg
+            description = title
             embed = discord.Embed(color= color, description= description, title = embedTitle)
             await ctx.send(embed=embed)
         else:
-            await ctx.send('A tag with the name "{0}" does not exist'.format(arg))
+            await ctx.send('A tag with the name "{0}" does not exist'.format(title))
 
 
 
@@ -82,7 +84,7 @@ async def handleTimeout(tag,ctx):
     description = tag['title']
     embed = discord.Embed(color= color, description= description, title = embedTitle)
     await ctx.send(embed=embed)
-            
+         
 def setup(bot):
     bot.add_cog(tag(bot))
 
