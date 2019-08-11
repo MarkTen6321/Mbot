@@ -9,3 +9,6 @@ config.json
 
 # Python Virtual Environment
 bot-env
+
+# Python cache
+__pycache__
