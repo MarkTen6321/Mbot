@@ -8,10 +8,10 @@ import json
 config = json.load(open('./config.json', 'r'))
 
 # Our Different Datasets
-spam_dataset_file = open('./assets/spam.csv', 'r')
+spam_dataset_file = open('./assets/spam.csv',encoding = 'ISO-8859-1')
 spam_dataset = spam_dataset_file.read()
 
-badwords_dataset_file = open('./assets/bad-words.csv', 'r')
+badwords_dataset_file = open('./assets/bad-words.csv',encoding = 'ISO-8859-1')
 badwords_dataset = badwords_dataset_file.read()
 
 # We will combine both the datasets and divide into two datasets one phrases and other words
@@ -104,7 +104,7 @@ async def spam_handle(message):
   else: 
     data = {
       u'id': author_id,
-      u'username': message.author.username,
+      u'username': message.author.name,
       u'spams': 1
     }
     await handleTimeout(data, message)
