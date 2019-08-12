@@ -38,10 +38,13 @@ main_phrases_dataset = []
 
 # sorts the array based on number of words
 for data in main_raw_dataset:
+    data = re.sub(r"([^\s\w]|_)+", "", data).lower()
     if len(data.split(" ")) > 1:
         main_phrases_dataset.append(data)
     else:
-        main_words_dataset.append(data)
+       # If data is only punctuation the data str becomes empty
+        if len(data) > 1:
+          main_words_dataset.append(data)
 
 # Checks string similarity
 similarity = lambda a, b: SequenceMatcher(None, a, b).ratio()
