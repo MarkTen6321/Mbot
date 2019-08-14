@@ -10,6 +10,9 @@ config.json
 # Python Virtual Environment
 bot-env
 
+# Python cache
+__pycache__
+
 #old commands
 depreciated
 

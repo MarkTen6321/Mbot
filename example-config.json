@@ -3,5 +3,8 @@
   "mod_role": "",
   "mute_role": "",
   "owner_id": "",
+  "eval_allowed": [
+    ""
+  ],
   "token": ""
 }
