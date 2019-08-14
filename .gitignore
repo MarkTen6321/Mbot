@@ -1,9 +1,6 @@
 # Firebase Admin Credentials
 Firebase-admin-creds.json
 
-# Discord Config
-config.json
-
 # Stupid VS Code File
 .vscode
 
@@ -15,3 +12,6 @@ __pycache__
 
 #old commands
 depreciated
+
+# env files
+.env

@@ -2,20 +2,25 @@ import discord
 from discord.ext import commands
 import json
 
-config = json.load(open("./config.json", "r"))
 from spam import handleDiscordSpam
 
 import time
 
-from os import listdir
+from os import listdir, environ
 from os.path import isfile, join
 
-import sys, traceback
+import traceback
 
 description = "Meet Mbot the Fancy Bot!"
 
-
 cogs_dir = "cogs"
+
+from dotenv import load_dotenv
+load_dotenv()
+
+# Load token from either config.json or environment variables
+config = json.load(open("./config.json", "r"))
+config.update({ 'token': environ['token'] or config['token'] })
 
 
 bot = commands.Bot(command_prefix="m!", description=description)
