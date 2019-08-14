@@ -73,10 +73,7 @@ class evilEval(commands.Cog):
         }
         # We convert the node into a Function that can be called
         exec(compile(parsed, filename="<ast>", mode="exec"), env)
-
-        def stringify(x):
-            return f"```{str(x)}```"
-
+        stringify = lambda x: f"```{str(x)}```"
         # We use the same global var as of the function to run it
         # And wrap it in try-except block to catch the exceptions
         try:
