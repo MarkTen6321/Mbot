@@ -13,6 +13,7 @@ class djs(commands.Cog):
     @commands.command()
     async def djs(self, ctx, *args):
         # set Default embed color
+        title = None
         color = discord.Color.from_rgb(33, 150, 244)
         # Allow for the method/property/event to be split by # or .
         if "#" in args[0]:
@@ -52,10 +53,7 @@ class djs(commands.Cog):
                 embed = discord.Embed(
                     title=title, color=color, description=description, url=url
                 )
-                embed.set_author(
-                    name="Discord.js",
-                    icon_url="https://discord.js.org/static/logo-square.png",
-                )
+
         # if the user inputted a property find which event it was and initiate the embed
         if findProperty(objectClass, search) != []:
 
@@ -71,14 +69,12 @@ class djs(commands.Cog):
             embed.add_field(
                 name="type", value=classProperty[0]["type"][0][0][0], inline=False
             )
-            embed.set_author(
-                name="Discord.js",
-                icon_url="https://discord.js.org/static/logo-square.png",
-            )
+
         # if the user inputted a method find which event it was and initiate the embed
         elif findMethod(objectClass, search) != []:
 
             classMethod = findMethod(objectClass, search)
+
             title = "{0}#{1}".format(objectClass[0]["name"], classMethod[0]["name"])
             description = classMethod[0]["description"]
             url = "https://discord.js.org/#/docs/main/stable/class/{0}?scrollTo={1}".format(
@@ -88,38 +84,44 @@ class djs(commands.Cog):
                 title=title, color=color, description=description, url=url
             )
             if not "examples" in classMethod[0]:
-                embed.add_field(
-                    name="Returns",
-                    value=classMethod[0]["returns"][0][0][0],
-                    inline=False,
-                )
+                if not "returns" in classMethod[0]:
+                    pass
+                else:
+                    embed.add_field(
+                        name="Returns",
+                        value=classMethod[0]["returns"][0][0][0],
+                        inline=False,
+                    )
             else:
-                embed.add_field(
-                    name="Example",
-                    value=classMethod[0]["examples"][0]
-                    .replace("`", "\\`")
-                    .replace("//", "```js\n")
-                    + "```",
-                    inline=False,
-                )
-                embed.add_field(
-                    name="Returns",
-                    value=classMethod[0]["returns"][0][0][0],
-                    inline=False,
-                )
-            embed.set_author(
-                name="Discord.js",
-                icon_url="https://discord.js.org/static/logo-square.png",
-            )
+                if not "returns" in classMethod[0]:
+                    embed.add_field(
+                        name="Example",
+                        value=classMethod[0]["examples"][0].replace("//", "```js\n")
+                        + "```",
+                        inline=False,
+                    )
+                else:
+                    embed.add_field(
+                        name="Example",
+                        value=classMethod[0]["examples"][0].replace("//", "```js\n")
+                        + "```",
+                        inline=False,
+                    )
+                    embed.add_field(
+                        name="Returns",
+                        value=classMethod[0]["returns"][0][0][0],
+                        inline=False,
+                    )
+
         # if all else fails
         elif title is None:
             title = "No results"
             description = "What you were looking for probably does not exist"
             color = discord.Color.from_rgb(191, 38, 0)
-            embed = discord.Embed(
-                title=title, color=color, description=description, url=url
-            )
-
+            embed = discord.Embed(title=title, color=color, description=description)
+        embed.set_author(
+            name="Discord.js", icon_url="https://discord.js.org/static/logo-square.png"
+        )
         await ctx.send(embed=embed)
 
 
