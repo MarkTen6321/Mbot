@@ -1,21 +1,35 @@
-import traceback
-import sys
-from os.path import isfile, join
-from os import listdir
-import time
-from spam import handleDiscordSpam
+# Main Discord Client Modules
 import discord
 from discord.ext import commands
+
+# For parsing config.json
 import json
 
-config = json.load(open("./config.json", "r"))
+# For Spam Filter
+from spam import handleDiscordSpam
 
+# For logs of time
+import time
+
+# Some fs functions and env
+from os import listdir, environ
+from os.path import isfile, join
+
+# To get Traceback if some cog errors out
+import traceback
 
 description = "Meet Mbot the Fancy Bot!"
 
-
 cogs_dir = "cogs"
 
+# For local .env Files
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Load token from either config.json or environment variables
+config = json.load(open("./config.json", "r"))
+config.update({"token": environ.get("token") or config.get("token")})
 
 bot = commands.Bot(command_prefix="m!", description=description)
 
@@ -50,4 +64,29 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
+# Start web app (in order to keep the app alive): http://neil-bot.herokuapp.com/
+from aiohttp import web
+from os import environ
+
+
+# Routes
+routes = web.RouteTableDef()
+
+
+@routes.get("/")
+def main(req):
+    return web.Response(text="Hey there! Howdy?")
+
+
+# Application
+app = web.Application()
+app.add_routes(routes)
+
+PORT = environ.get("PORT") or 8080
+
+# Add a task to bot loop
+bot.loop.create_task(web._run_app(app, port=PORT))
+
+
+# Finally run the bot
 bot.run(config["token"])
