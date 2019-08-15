@@ -29,7 +29,7 @@ load_dotenv()
 
 # Load token from either config.json or environment variables
 config = json.load(open("./config.json", "r"))
-config.update({"token": environ["token"] or config["token"]})
+config.update({"token": environ.get("token") or config.get("token")})
 
 bot = commands.Bot(command_prefix="m!", description=description)
 
@@ -64,7 +64,7 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
-# Start web app (in order to keep the app alive)
+# Start web app (in order to keep the app alive): http://neil-bot.herokuapp.com/
 from aiohttp import web
 from os import environ
 
