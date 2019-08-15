@@ -96,8 +96,7 @@ class djs(commands.Cog):
                 if not "returns" in classMethod[0]:
                     embed.add_field(
                         name="Example",
-                        value=classMethod[0]["examples"][0].replace("//", "```js\n")
-                        + "```",
+                        value="```js\n {0} \n```".format(classMethod[0]["examples"][0]),
                         inline=False,
                     )
                 else:
